@@ -5,15 +5,11 @@ $host.ui.rawui.ForegroundColor = "Red"
 $PSDefaultParameterValues = @{ '*:Encoding' = 'utf8' }
 # Define the list of folders to be backed up
 $folders = @(
-    "C:\Users\Lemandog\Pictures\PRACTICE",
-    "C:\Users\Lemandog\Pictures\wip",
-    "C:\Users\Lemandog\IdeaProjects",
-    "C:\Users\Lemandog\PycharmProjects",
-    "C:\Users\Lemandog\Documents\SYSTEMAX Software Development\SAI2 Demo",
-    "C:\Users\Lemandog\Desktop\ןנמדנאללû"
+    "C:\Users\Lemandog\Desktop\Example0",
+    "C:\Users\Lemandog\Desktop\Example1"
 )
 
-# Define the root path for the backup destination on the thumb drive
+# Define the root path for the backup destination on the drive
 $backupRoot = "D:\Backups"
 
 # Calculate the size of the thumb drive
