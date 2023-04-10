@@ -1,7 +1,9 @@
+# Cool hackery look and smaller window
 [console]::WindowHeight = 35
 [console]::WindowWidth = 140
 $host.ui.rawui.BackgroundColor = "Black"
 $host.ui.rawui.ForegroundColor = "Red"
+# Set encoding so not only english is supported
 $PSDefaultParameterValues = @{ '*:Encoding' = 'utf8' }
 # Define the list of folders to be backed up
 $folders = @(
@@ -9,28 +11,28 @@ $folders = @(
     "C:\Users\Lemandog\Desktop\Example1"
 )
 
-# Define the root path for the backup destination on the drive
+# Define destination on the drive
 $backupRoot = "D:\Backups"
 
-# Calculate the size of the thumb drive
 $drive = Get-PSDrive -Name "D"
 $thumbDriveSize = [Math]::Round(($drive.Free/1GB), 2) + [Math]::Round(($drive.Used/1GB), 2)
 
-# Set the maximum size of the backup to 80% of the thumb drive size
-$maxSize = [Math]::Round((0.8 * $thumbDriveSize), 2) * 1GB
+$maxSize = $thumbDriveSize * 0.8
+# (use 0.8% of drive)
 
 # Calculate the total size of the current backup
 $totalSize = [Math]::Round(($drive.Used/1GB), 2)
 # If the total size of the backup is greater than the maximum size, delete the oldest backup
 Write-Output "TOTAL DRIVE SIZE: $thumbDriveSize"
 Write-Output "USED DRIVE SIZE: $totalSize"
+Write-Output "MAX BACKUP SIZE: $maxSize"
 if ($totalSize -gt $maxSize) {
 $oldestBackup = Get-ChildItem $backupRoot | Sort-Object CreationTime | Select-Object -First 1
-Remove-Item $oldestBackup.FullName -Force
+Remove-Item $oldestBackup.FullName -Force -Recurse
 }
 $destination = Join-Path $backupRoot (Get-Date -Format "yyyy-MM-dd_HH-mm-ss")
 New-Item -ItemType Directory -Path $destination
-# Create a new backup by copying the folders to the backup destination
+
 foreach ($folder in $folders) {
 Copy-Item $folder $destination -Recurse -passthru | ?{$_ -is [system.io.fileinfo]}
 }
